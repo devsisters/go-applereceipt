@@ -1,0 +1,28 @@
+name: Update Apple PKI
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: '30 1 1 * *' # First day of every month at 1:30 AM
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v4
+      with:
+          go-version: '^1.19.10'
+    - run: go generate ./applepki
+    - uses: peter-evans/create-pull-request@v4
+      with:
+        commit-message: Update Apple PKI
+        title: Update Apple PKI
+        body: |
+          > This is an automated pull request
+
+          There is a new list of Apple PKI certificates available. This pull request updates the list of Apple PKI certificates to the latest version.
+        branch: update-apple-pki
+        committer: 'GitHub <noreply@github.com>'
+        author: 'GitHub <noreply@github.com>'
+        delete-branch: true

@@ -1,0 +1,28 @@
+name: Update Receipt Fields
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: '30 1 1 * *' # First day of every month at 1:30 AM
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v4
+      with:
+          go-version: '^1.19.10'
+    - run: go generate .
+    - uses: peter-evans/create-pull-request@v4
+      with:
+        commit-message: Update receipt fields
+        title: Update receipt fields
+        body: |
+          > This is an automated pull request
+
+          There is an updated set of receipt fields available. This pull request updates the generated receipt struct to the latest version.
+        branch: update-receipt-fields
+        committer: 'GitHub <noreply@github.com>'
+        author: 'GitHub <noreply@github.com>'
+        delete-branch: true
