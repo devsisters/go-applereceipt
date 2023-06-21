@@ -34,13 +34,19 @@ func Decode(receipt []byte, certPool *x509.CertPool) (AppReceipt, error) {
 	if err != nil {
 		return AppReceipt{}, err
 	}
-	if err := p.VerifyWithChain(certPool); err != nil {
-		return AppReceipt{}, err
-	}
 
 	var attrs []ReceiptAttribute
 	if _, err := asn1.UnmarshalWithParams(p.Content, &attrs, "set"); err != nil {
 		return AppReceipt{}, err
 	}
-	return newAppReceipt(attrs)
+	appReceipt, err := newAppReceipt(attrs)
+	if err != nil {
+		return AppReceipt{}, err
+	}
+
+	if err := p.VerifyWithChainAtTime(certPool, appReceipt.ReceiptCreationDate); err != nil {
+		return AppReceipt{}, err
+	}
+
+	return appReceipt, nil
 }
