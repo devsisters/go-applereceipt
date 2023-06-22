@@ -1,4 +1,4 @@
-# go-applereceipt
+# go-applereceipt [![Test](https://github.com/devsisters/go-applereceipt/actions/workflows/test.yaml/badge.svg)](https://github.com/devsisters/go-applereceipt/actions/workflows/test.yaml)
 
 Go library to parse and verify Apple App Store receipts, locally on the server.
 
